@@ -1,3 +1,3 @@
 # api
 
-API automation using Java, Cucumber, JUnit, RestAssured, Hamcrest
+API automation framework using Java, Cucumber, JUnit, RestAssured, Hamcrest
