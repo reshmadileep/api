@@ -1,11 +1,13 @@
 package stepDefintions;
 
 import businessObjects.Post;
+import io.restassured.mapper.ObjectMapperType;
 import requests.Post.RetrievePost;
 import cucumber.api.java.en.*;
 import requests.GetRequestBaseClass;
 import requests.PostRequestBaseClass;
 import requests.Post.CreatePost;
+import utilities.Utils;
 
 public class PostSteps {
     private World world;
@@ -29,6 +31,11 @@ public class PostSteps {
     @Then("a post is created and response is received")
     public void a_resource_is_created_and_response_is_received() {
         createPost.validateSuccessResponse(condition, Post.class);
+        Post actual = (Post) createPost.businessObject;
+        world.context.put("createdId",actual.id);
+        iSendARequestToRetrieveAPostDetailsWith("verify post");
+        Post expected = getPost.response.body().as(Post.class, ObjectMapperType.GSON);
+        Utils.assertThatObjectsAreEqual(expected,actual);
     }
 
     @Then("a retrieve posts response is received")

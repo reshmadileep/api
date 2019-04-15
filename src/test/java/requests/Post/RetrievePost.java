@@ -22,6 +22,9 @@ public class RetrievePost extends GetRequestBaseClass {
             case "invalid details":
                 baseUrl = baseUrl + "/invalidId";
                 break;
+            case "verify post":
+                baseUrl = baseUrl + "/" + world.context.get("createdId").toString();
+                break;
         }
         return this;
     }
