@@ -1,10 +1,6 @@
 package requests;
 
-import java.util.*;
-import org.json.simple.JSONObject;
-
 import businessObjects.BaseBusinessObject;
-import io.restassured.RestAssured.*;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.mapper.ObjectMapperType;
@@ -14,27 +10,31 @@ import stepDefintions.World;
 import utilities.Utils;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertThat;
-
-import static org.hamcrest.Matchers.*;
 
 public abstract class PostRequestBaseClass {
-	private World world;
-	public JSONObject requestBody = new JSONObject();
-	public BaseBusinessObject businessObject = null;
-	public ContentType contentType = ContentType.JSON;
-	public ContentType accept = ContentType.JSON;
-	public String url = "";
-	public String baseUrl = "";
-	public RequestSpecification request;
-	public Response response;
+	protected World world;
+//    protected JSONObject requestBody = new JSONObject();
+    private BaseBusinessObject businessObject = null;
+    private ContentType contentType = ContentType.JSON;
+    private ContentType accept = ContentType.JSON;
+	private String url = "";
+	protected String baseUrl = "";
+	private RequestSpecification request;
+	private Response response;
 
     public PostRequestBaseClass(World world) {
         this.world = world;
     }
 
-	@SuppressWarnings("unchecked")
-	public PostRequestBaseClass createRequest() {
+    public BaseBusinessObject getBusinessObject() {
+        return businessObject;
+    }
+
+    public void setBusinessObject(BaseBusinessObject businessObject) {
+        this.businessObject = businessObject;
+    }
+
+    public PostRequestBaseClass createRequest() {
 		request = RestAssured.given();
         request.baseUri(baseUrl);
         request.accept(accept);
@@ -46,11 +46,11 @@ public abstract class PostRequestBaseClass {
 	public PostRequestBaseClass post() {
 		response = request.log().all(true).post(url);
         response.then().log().all(true);
-        this.world.context.put("response", response);
+        this.world.getContext().put("response", response);
 		return this;
 	}
 	
-	public PostRequestBaseClass validateErrorResponse( String condition, Class className){
+	public PostRequestBaseClass validateErrorResponse( String condition){
 		response.then().assertThat().statusCode(equalTo(400));
 		return this;
 	}
@@ -58,7 +58,7 @@ public abstract class PostRequestBaseClass {
 	public PostRequestBaseClass validateSuccessResponse(String condition, Class className) {
 		response.then().assertThat().statusCode(equalTo(201));
         BaseBusinessObject responseObject = response.body().as(businessObject.getClass(), ObjectMapperType.GSON);
-        businessObject.id = responseObject.id;
+        businessObject.setId(responseObject.getId());
         Utils.assertThatObjectsAreEqual(businessObject,responseObject);
 		return this;
 	}

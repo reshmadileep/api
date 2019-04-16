@@ -3,12 +3,10 @@ package utilities;
 import com.google.gson.Gson;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
-import java.util.HashMap;
-import stepDefintions.World;
-
 import static org.junit.Assert.assertTrue;
 
 public class Utils {
+    private Utils(){}
 
     @SuppressWarnings("unchecked")
 	public static Object createBusinessObjectFromClassName(Object object, Class className) {

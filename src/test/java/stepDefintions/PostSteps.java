@@ -11,35 +11,35 @@ import utilities.Utils;
 
 public class PostSteps {
     private World world;
-    PostRequestBaseClass createPost;
-    GetRequestBaseClass getPost;
-    String condition;
+    private PostRequestBaseClass createPost;
+    private GetRequestBaseClass getPost;
+    private String condition;
 
     public PostSteps(World world) {
         this.world = world;
     }
 
     @When("I send a request to create a post with {string}")
-    public void i_send_a_request_to_create_a_resource_with(String condition) {
-    this. condition = condition;
+    public void iSendARequestToCreateAResourceWith(String condition) {
+        this.condition = condition;
         createPost = new CreatePost(this.world)
-                .UpdateRequest(condition)
+                .updateRequest(condition)
                 .createRequest()
                 .post();
     }
 
     @Then("a post is created and response is received")
-    public void a_resource_is_created_and_response_is_received() {
+    public void aResourceIsCreatedAndResponseIsReceived() {
         createPost.validateSuccessResponse(condition, Post.class);
-        Post actual = (Post) createPost.businessObject;
-        world.context.put("createdId",actual.id);
+        Post actual = (Post) createPost.getBusinessObject();
+        world.add2Context("createdId",actual.getId());
         iSendARequestToRetrieveAPostDetailsWith("verify post");
-        Post expected = getPost.response.body().as(Post.class, ObjectMapperType.GSON);
+        Post expected = getPost.getResponse().body().as(Post.class, ObjectMapperType.GSON);
         Utils.assertThatObjectsAreEqual(expected,actual);
     }
 
     @Then("a retrieve posts response is received")
-    public void a_retrieve_resource_response_is_received() {
+    public void aRetrieveResourceResponseIsReceived() {
        getPost.validateSuccessResponse(condition, Post.class);
     }
 
@@ -56,7 +56,7 @@ public class PostSteps {
                 .createRequest()
                 .get();
         if(!condition.equals("all posts"))
-            getPost.isSingleItemReturned = true;
+            getPost.setSingleItemReturned(true);
     }
 
     @Then("a 404 Not found response is received")

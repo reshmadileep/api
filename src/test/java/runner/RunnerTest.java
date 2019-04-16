@@ -1,6 +1,5 @@
 package runner;
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +25,9 @@ import net.masterthought.cucumber.Reportable;
 )
 
 public class RunnerTest {
+
+    private RunnerTest(){}
+
     @AfterClass
     public static void writeCucumberHtmlReport() {
         File reportOutputDirectory = new File("target");
@@ -37,7 +39,6 @@ public class RunnerTest {
         String projectName = "TMF API E2E Automation";
         boolean runWithJenkins = false;
 //    	boolean parallelTesting = false;
-
         Configuration configuration = new Configuration(reportOutputDirectory, projectName);
         // optional configuration - check javadoc
         configuration.setRunWithJenkins(runWithJenkins);
@@ -52,15 +53,12 @@ public class RunnerTest {
 //    	classificationFiles.add("properties-1.properties");
 //    	classificationFiles.add("properties-2.properties");
 //    	configuration.addClassificationFiles(classificationFiles);
-
         ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
-        @SuppressWarnings("unused")
-        Reportable result = reportBuilder.generateReports();
+//        Reportable result = reportBuilder.generateReports();
+        reportBuilder.generateReports();
         // and here validate 'result' to decide what to do
         // if report has failed features, undefined steps etc
     }
-
-
 }
 
 

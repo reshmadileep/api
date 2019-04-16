@@ -2,6 +2,7 @@ package stepDefintions.hooks;
 
 import java.io.FileInputStream;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Map.Entry;
 
@@ -26,11 +27,11 @@ public class Hooks {
 		}catch (Exception e) { 
 			System.out.println("exception while reading properties file. " + e.getMessage());
 		}
-		HashMap<String, String> map= new HashMap<String, String>();
+		Map<String, String> map= new HashMap<>();
 		for (Entry<Object, Object> entry : properties.entrySet()) {
 		    map.put((String) entry.getKey(), (String) entry.getValue());
 		}
-		this.world.context.put("config", map);
+		this.world.add2Context("config", map);
 	}	
 
 
